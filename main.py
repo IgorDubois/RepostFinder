@@ -26,10 +26,11 @@ def compare(img_hash, hash_arr, threshold):
 
 #####################################
 # Check if a picture has already been posted
-# Input: valid image URL, threshold
+# Input: valid image URL, post ID. Optional: threshold, 5 by default
 # Output: (True , "") if not a repost, (False , Reposted Image Url) if repost
 #####################################
-def isNotARepost(img_url,threshold):
+def isNotARepost(img_url,post_id,threshold=5):
+    print(threshold)
     reference_array = load_hash()
 
     urllib.request.urlretrieve(img_url, "data/temp.jpg")
@@ -42,10 +43,10 @@ def isNotARepost(img_url,threshold):
         with open('data/images_hash.csv', 'a', newline='') as csvfile:
             hashwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            hashwriter.writerow(['{:016x}'.format(img_hash),img_url])
+            hashwriter.writerow(['{:016x}'.format(img_hash),post_id])
         return True,""
     else:
         return False, result[1]
 
-
-isNotARepost(URL,10)
+isNotARepost(URL,"okokok")
+isNotARepost(URL,"okokok",threshold=10)
