@@ -21,20 +21,31 @@ def compare(img_hash, hash_arr, threshold):
         if abs(img_hash - int(h[0], 16)) < threshold:
             print("Repost detected")
             print("Repost from: " + str(h[1]))
-            return False
+            return False, str(h[1])
     return True
 
-reference_array = load_hash()
+#####################################
+# Check if a picture has already been posted
+# Input: valid image URL, threshold
+# Output: (True , "") if not a repost, (False , Reposted Image Url) if repost
+#####################################
+def isNotARepost(img_url,threshold):
+    reference_array = load_hash()
 
-urllib.request.urlretrieve(URL, "data/temp.jpg")
-img = Image.open("data/temp.jpg")
+    urllib.request.urlretrieve(img_url, "data/temp.jpg")
+    img = Image.open("data/temp.jpg")
 
-img_hash = int(str(imagehash.average_hash(img)),16)
+    img_hash = int(str(imagehash.average_hash(img)),16)
+    result = compare(img_hash,reference_array,threshold)
+    if result[0]:
+        print("This is not a repost")
+        with open('data/images_hash.csv', 'a', newline='') as csvfile:
+            hashwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            hashwriter.writerow(['{:016x}'.format(img_hash),img_url])
+        return True,""
+    else:
+        return False, result[1]
 
-if compare(img_hash,reference_array,10):
-    print("This is not a repost")
-    with open('data/images_hash.csv', 'a', newline='') as csvfile:
-        hashwriter = csv.writer(csvfile, delimiter=' ',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        hashwriter.writerow(['{:016x}'.format(img_hash),URL])
 
+isNotARepost(URL,10)
