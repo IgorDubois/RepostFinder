@@ -6,9 +6,8 @@ import urllib.request
 from datetime import datetime
 from datetime import timedelta
 
-#######################################
-# 
-#######################################
+URL = "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/15825978_1412528322113468_829569879456018077_n.jpg?oh=c2be5eb3b0d16c9803229d7b2ae67c97&oe=591AA57E"
+
 def load_hash():
     hash_arr = []
     with open("data/images_hash.csv", 'r' , newline='') as csvfile:
@@ -27,7 +26,6 @@ def compare(img_hash, hash_arr, threshold):
 
 reference_array = load_hash()
 
-URL = "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/15825978_1412528322113468_829569879456018077_n.jpg?oh=c2be5eb3b0d16c9803229d7b2ae67c97&oe=591AA57E"
 urllib.request.urlretrieve(URL, "data/temp.jpg")
 img = Image.open("data/temp.jpg")
 
